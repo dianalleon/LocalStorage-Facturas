@@ -1,7 +1,7 @@
 //Factura con localStorage
 
 const productos = JSON.parse(localStorage.getItem('producto')) ?? [];
-
+mostrarTabla();
 let tabla = document.querySelector("#table");
 
 //Guardar en el formulario
@@ -20,11 +20,18 @@ formulario.addEventListener('submit', function (e) { //recolecta los datos del f
   })
 
 if (prueb == false) {
-    productos.push(producto)
-    localStorage.setItem('producto', JSON.stringify(productos));
-    mostrarTabla();
+      productos.push(producto)
+      
+        let result = productos.reduce((total, item)=>{
+          return total=item.cantidad*item.precioUnitario
+        },0)
+        producto.valorTotal=result;
+
+      localStorage.setItem('producto', JSON.stringify(productos));
+      mostrarTabla();
 } else { alert('producto ya existe') }
 });
+
 
 
 function mostrarTabla() {
@@ -35,12 +42,11 @@ function mostrarTabla() {
           <td>${item.nombre}</td>
           <td>${item.cantidad}</td>
           <td>${item.precioUnitario}</td>
+          <td>${item.valorTotal}</td>
     </tr>`
   })
     let tab = document.querySelector("#tab");
     tab.innerHTML = result;
 }
 
-function valorTotal(){
-  return 0;
-}
+
